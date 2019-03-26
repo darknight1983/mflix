@@ -307,13 +307,15 @@ export default class MoviesDAO {
         {
           $lookup: {
             from: "comments",
-            let: { "id": id},
+            let: { "id": '$_id'},
             pipeline: [
               {
-                $match:
-                  { $expr: {$eq: []}}
-              }
-            ]
+                '$match':
+                  { '$expr': {'$eq': ['$movie_id', '$$id']}}
+              },
+              { $sort: { 'date': -1}}
+            ],
+            as: "comments"
           }
         }
       ]
